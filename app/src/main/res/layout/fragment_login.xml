@@ -1,80 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     tools:context=".presentation.auth.login.LoginFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:background="@color/white"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="5dp"
-        android:text="Войти" />
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/form"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
         android:orientation="vertical">
-        <LinearLayout
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/email_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/email_input"
-                android:text="Электронная почта"/>
-
-            <EditText
-                android:id="@+id/email_input"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Введите адрес эл. почты"
-                android:inputType="textEmailAddress" />
-        </LinearLayout>
+            android:text="Войти" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/email_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/email_input"
+                    android:text="Электронная почта" />
+
+                <EditText
+                    android:id="@+id/email_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Введите адрес эл. почты"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+
             <TextView
+                android:id="@+id/pwd_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:labelFor="@id/email_input"
-                android:text="Пароль"/>
+                android:text="Пароль" />
 
-            <EditText
-                android:id="@+id/password_input"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Введите пароль"
-                android:inputType="textPassword" />
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:gravity="center">
 
+                <EditText
+                    android:id="@+id/password_input"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Введите пароль"
+                    android:inputType="textPassword" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
+                <ImageView
+                    android:id="@+id/show_password"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_eye_closed"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/proceed_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:labelFor="@id/email_input"
-                android:text="Повтор пароля"/>
+                android:layout_gravity="center"
+                android:text="Войти" />
 
-            <EditText
-                android:id="@+id/repeat_password_input"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Повторите пароль"
-                android:inputType="textPassword" />
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+
+
+</RelativeLayout>

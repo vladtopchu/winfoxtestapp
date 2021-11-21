@@ -36,6 +36,5 @@ class MainActivity : AppCompatActivity() {
         if(sharedPref.getUserId() == null) {
             navController.navigate(ProfileFragmentDirections.actionProfileFragmentToAuthFragment())
         }
-
     }
 }
