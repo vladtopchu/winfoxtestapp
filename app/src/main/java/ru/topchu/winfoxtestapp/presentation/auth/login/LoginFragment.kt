@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -39,6 +41,16 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.hintText.translationX = -(binding.hintText.measuredWidth).toFloat()
+
+        binding.hint.setOnClickListener {
+            if(binding.hintText.alpha == 0f) {
+                binding.hintText.animate().alpha(1f).translationX(0f).setDuration(1000).start()
+            } else {
+                binding.hintText.animate().alpha(0f).translationX(-binding.hintText.width.toFloat()).setDuration(1000).start()
+            }
+        }
 
         viewModel.state.observe(viewLifecycleOwner) {
             if(it.isLoading) {

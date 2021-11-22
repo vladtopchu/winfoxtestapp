@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.topchu.winfoxtestapp.R
 import ru.topchu.winfoxtestapp.data.local.AppDatabase
 import ru.topchu.winfoxtestapp.databinding.FragmentProfileBinding
 import ru.topchu.winfoxtestapp.di.ApplicationScope
@@ -44,13 +45,28 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.update()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(sharedPref.getUserId() == null) {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToAuthFragment())
+        }
+
         viewModel.userData.observe(viewLifecycleOwner) {
             if(it != null) {
                 binding.test.text = it.toString()
             }
         }
+
+        binding.toInfo.setOnClickListener {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToInfoFragment())
+        }
+
         binding.logout.setOnClickListener {
             applicationScope.launch {
                 database.userDao().deleteUser(sharedPref.getUserId()!!)

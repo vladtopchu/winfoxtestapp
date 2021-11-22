@@ -10,5 +10,4 @@ interface WinfoxRepository {
     fun registerUser(registrationForm: RegistrationDto): Flow<Resource<RegistrationDto>>
     fun checkLogin(loginForm: LoginDto): Flow<Resource<LoginDto>>
     fun updateProfile(updateProfileForm: UpdateProfileDto): Flow<Resource<UpdateProfileDto>>
-
 }

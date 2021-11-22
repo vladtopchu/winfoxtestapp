@@ -30,11 +30,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        navController = findNavController(this, R.id.nav_host_main)
-
-        if(sharedPref.getUserId() == null) {
-            navController.navigate(ProfileFragmentDirections.actionProfileFragmentToAuthFragment())
-        }
     }
 }

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.profile.info.InfoFragment">
+
+    <!--        tools:visibility="gone"-->
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    android:visibility="gone"-->
+<!--    tools:visibility="visible"-->
+    <ScrollView
+        android:id="@+id/form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Изменение данных профиля"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/email_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:labelFor="@id/email_input"
+                android:text="Электронная почта" />
+
+            <EditText
+                android:id="@+id/email_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/email_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Введите адрес эл. почты"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                android:id="@+id/firstname_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/email_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Имя" />
+
+            <EditText
+                android:id="@+id/firstname_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/firstname_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Введите имя"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/lastname_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/firstname_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Фамилия" />
+
+            <EditText
+                android:id="@+id/lastname_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/lastname_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Введите фамилию"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/middlename_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/lastname_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Отчество" />
+
+            <EditText
+                android:id="@+id/middlename_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/middlename_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Введите отчество"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/birthdate_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/middlename_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Дата рождения" />
+
+            <Button
+                android:id="@+id/birthdate_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/birthdate_label"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/birthplace_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/birthdate_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Место Рождения" />
+
+            <EditText
+                android:id="@+id/birthplace_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/birthplace_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Введите место рождения"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/organization_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/birthplace_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Организация" />
+
+            <EditText
+                android:id="@+id/organization_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/organization_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Введите название организации"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/position_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/organization_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Должность" />
+
+            <EditText
+                android:id="@+id/position_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/position_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Введите должность"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/interests_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/position_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Ваши Увлечения" />
+
+            <Button
+                android:id="@+id/interests_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/interests_label"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Выбрать интересы"
+                android:inputType="textEmailAddress" />
+
+            <Button
+                android:id="@+id/proceed_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/interests_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Обновить" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

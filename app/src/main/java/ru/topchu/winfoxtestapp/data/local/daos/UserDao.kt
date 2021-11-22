@@ -12,10 +12,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE userId = :id")
     suspend fun getUserById(id: String): UserEntity
 
-    @Update
-    suspend fun updateUser(user: UserEntity)
+    @Update(entity = UserEntity::class)
+    suspend fun updateUser(user: UserEntity): Int
 
     @Query("DELETE FROM users WHERE userId = :id")
     suspend fun deleteUser(id: String)
-
 }

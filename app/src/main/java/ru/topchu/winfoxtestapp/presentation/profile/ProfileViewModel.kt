@@ -16,6 +16,7 @@ import ru.topchu.winfoxtestapp.domain.repository.WinfoxRepository
 import ru.topchu.winfoxtestapp.utils.Resource
 import ru.topchu.winfoxtestapp.utils.SharedPref
 import ru.topchu.winfoxtestapp.utils.asLiveData
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.log
 
@@ -28,9 +29,10 @@ class ProfileViewModel @Inject constructor (
     private val _userData = MutableLiveData<UserEntity?>(null)
     val userData = _userData.asLiveData()
 
-    init {
+    fun update() {
         viewModelScope.launch {
             if(sharedPref.getUserId() != null) {
+                Timber.d(sharedPref.getUserId())
                 _userData.postValue(database.userDao().getUserById(sharedPref.getUserId()!!))
             }
         }

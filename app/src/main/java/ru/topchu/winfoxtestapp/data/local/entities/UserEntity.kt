@@ -2,11 +2,12 @@ package ru.topchu.winfoxtestapp.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ru.topchu.winfoxtestapp.data.remote.dto.UpdateProfileDto
 
 @Entity(tableName = "users")
 data class UserEntity(
-    val userId: String,
-    val email: String,
+    val userId: String? = null,
+    val email: String? = null,
     val firstname: String? = null,
     val lastname: String? = null,
     val middlename: String? = null,
@@ -15,5 +16,17 @@ data class UserEntity(
     val organization: String? = null,
     val position: String? = null,
     val preferences: List<String> = emptyList(),
-    @PrimaryKey(autoGenerate = true) val id: Long = 0L
-)
+    @PrimaryKey(autoGenerate = true) var id: Long = 0L
+) {
+    fun toDto() = UpdateProfileDto(
+        email = email,
+        firstname = firstname,
+        lastname = lastname,
+        middlename = middlename,
+        birthdate = birthdate,
+        birth_place = birth_place,
+        organization = organization,
+        position = position,
+        preferences = preferences
+    )
+}
