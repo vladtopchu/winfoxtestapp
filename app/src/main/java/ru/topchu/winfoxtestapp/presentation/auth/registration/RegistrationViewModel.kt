@@ -1,4 +1,4 @@
-package ru.topchu.winfoxtestapp.presentation.auth.login
+package ru.topchu.winfoxtestapp.presentation.auth.registration
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.topchu.winfoxtestapp.data.remote.dto.LoginDto
+import ru.topchu.winfoxtestapp.data.remote.dto.RegistrationDto
 import ru.topchu.winfoxtestapp.domain.repository.WinfoxRepository
 import ru.topchu.winfoxtestapp.utils.Resource
 import ru.topchu.winfoxtestapp.utils.ViewState
@@ -16,19 +17,19 @@ import ru.topchu.winfoxtestapp.utils.asLiveData
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class RegistrationViewModel @Inject constructor(
     private val repository: WinfoxRepository
 ): ViewModel() {
 
-    private val _state = MutableLiveData(ViewState<LoginDto>())
+    private val _state = MutableLiveData(ViewState<RegistrationDto>())
     val state = _state.asLiveData()
 
     private var job: Job? = null
 
-    fun proceedLogin(email: String, password: String) {
+    fun proceedRegistration(email: String, firstname: String, lastname: String, password: String) {
         job?.cancel()
         job = viewModelScope.launch {
-            repository.checkLogin(LoginDto(email, password))
+            repository.registerUser(RegistrationDto(email, firstname, lastname, password))
                 .onEach { result ->
                     when(result) {
                         is Resource.Success -> {

@@ -7,7 +7,7 @@ data class RegistrationDto(
     val firstname: String,
     val lastname: String,
     val password: String,
-    val id: String?
+    val id: String? = null
 ) {
     fun toUserEntity() = UserEntity(
         userId = id!!,

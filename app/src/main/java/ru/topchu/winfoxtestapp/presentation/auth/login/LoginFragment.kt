@@ -15,6 +15,7 @@ import ru.topchu.winfoxtestapp.R
 import ru.topchu.winfoxtestapp.databinding.FragmentLoginBinding
 import ru.topchu.winfoxtestapp.databinding.FragmentRegistrationBinding
 import ru.topchu.winfoxtestapp.presentation.auth.AuthViewModel
+import ru.topchu.winfoxtestapp.utils.clickListener
 import ru.topchu.winfoxtestapp.utils.isValidEmail
 import timber.log.Timber
 import kotlin.properties.Delegates
@@ -27,13 +28,6 @@ class LoginFragment : Fragment() {
 
     private val viewModel: LoginViewModel by viewModels()
     private val sharedViewModel: AuthViewModel by activityViewModels()
-
-    private var flag by Delegates.notNull<Boolean>()
-
-    override fun onResume() {
-        super.onResume()
-        flag = false
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,17 +54,7 @@ class LoginFragment : Fragment() {
             }
         }
 
-        binding.showPassword.setOnClickListener {
-            if(flag) {
-                binding.showPassword.setImageResource(R.drawable.ic_eye_closed)
-                binding.passwordInput.transformationMethod = PasswordTransformationMethod.getInstance()
-            } else {
-                binding.showPassword.setImageResource(R.drawable.ic_eye_open)
-                binding.passwordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
-            }
-            binding.passwordInput.setSelection(binding.passwordInput.text.length)
-            flag = !flag
-        }
+        binding.showPassword.setOnClickListener(clickListener(binding.passwordInput))
 
         binding.proceedLogin.setOnClickListener {
             Timber.d(binding.emailInput.text.toString())
