@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -46,6 +47,8 @@ class ImageActivity : AppCompatActivity() {
 
     private val viewModel: ImageViewModel by viewModels()
 
+    private var lastAction = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImageBinding.inflate(layoutInflater)
@@ -55,7 +58,24 @@ class ImageActivity : AppCompatActivity() {
             if(it.any { entry -> !entry.value }) {
                 Timber.d("Permission deniend for: ${it.toList().filter { predicate -> !predicate.second }}")
             } else {
+                when(lastAction){
+                    0 -> makePhoto()
+                    1 -> selectImage()
+                    else -> throw Exception("Unrecognized action")
+                }
                 Timber.d("Permission given!")
+            }
+        }
+
+        cameraImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+            if(it) {
+                viewModel.setUri(tempImageUri!!)
+            }
+        }
+
+        selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if(it != null) {
+                viewModel.setUri(it)
             }
         }
 
@@ -121,27 +141,8 @@ class ImageActivity : AppCompatActivity() {
             }
         }
 
-        cameraImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-            if(it) {
-                viewModel.setUri(tempImageUri!!)
-            }
-        }
-
         binding.makePhoto.setOnClickListener {
-            if(permissions.any { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }) {
-                requestPermissionLauncher!!.launch(permissions)
-            } else {
-                lifecycleScope.launchWhenStarted {
-                    getTmpFileUri().let { uri ->
-                        tempImageUri = uri
-                        cameraImageLauncher!!.launch(uri)
-                    }
-                }
-            }
-        }
-
-        selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            viewModel.setUri(it)
+            makePhoto()
         }
 
         binding.selectImage.setOnClickListener {
@@ -155,9 +156,24 @@ class ImageActivity : AppCompatActivity() {
 
     private fun selectImage(){
         if(permissions.any { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }) {
+            lastAction = 1
             requestPermissionLauncher!!.launch(permissions)
         } else {
             selectImageLauncher!!.launch("image/*")
+        }
+    }
+
+    private fun makePhoto(){
+        if(permissions.any { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }) {
+            lastAction = 0
+            requestPermissionLauncher!!.launch(permissions)
+        } else {
+            lifecycleScope.launchWhenStarted {
+                getTmpFileUri().let { uri ->
+                    tempImageUri = uri
+                    cameraImageLauncher!!.launch(uri)
+                }
+            }
         }
     }
 

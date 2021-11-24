@@ -93,8 +93,6 @@ class ImageViewModel @Inject constructor (
                         }
                     }.launchIn(this)
             }
-        } else {
-            Timber.d("Выберите фото!")
         }
     }
 }
