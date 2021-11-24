@@ -56,8 +56,10 @@ class InfoFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             if(it.isLoading) {
                 binding.progressCircular.visibility = View.VISIBLE
+                binding.form.visibility = View.GONE
             } else {
                 binding.progressCircular.visibility = View.GONE
+                binding.form.visibility = View.VISIBLE
                 if(it.errorMessage != null) {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                 } else if(it.response != null) {

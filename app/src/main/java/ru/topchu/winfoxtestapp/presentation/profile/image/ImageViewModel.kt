@@ -13,29 +13,29 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import ru.topchu.winfoxtestapp.data.local.AppDatabase
 import ru.topchu.winfoxtestapp.data.local.daos.UserDao
 import ru.topchu.winfoxtestapp.data.local.entities.UserEntity
 import ru.topchu.winfoxtestapp.data.remote.WinfoxApi.Companion.BASE_URL
+import ru.topchu.winfoxtestapp.data.remote.dto.ImageDto
 import ru.topchu.winfoxtestapp.data.remote.dto.LoginDto
 import ru.topchu.winfoxtestapp.data.remote.dto.RegistrationDto
 import ru.topchu.winfoxtestapp.domain.repository.WinfoxRepository
-import ru.topchu.winfoxtestapp.utils.Resource
-import ru.topchu.winfoxtestapp.utils.SharedPref
-import ru.topchu.winfoxtestapp.utils.UploadImageUtility
-import ru.topchu.winfoxtestapp.utils.asLiveData
+import ru.topchu.winfoxtestapp.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.log
 
 @HiltViewModel
 class ImageViewModel @Inject constructor (
-    @ApplicationContext applicationContext: Context,
+    @ApplicationContext private val applicationContext: Context,
     private val sharedPref: SharedPref,
-    private val userDao: UserDao
+    private val repository: WinfoxRepository
 ): ViewModel() {
 
-    private val _status: MutableLiveData<Resource<String>> = MutableLiveData(Resource.Idle())
+    private val _status = MutableLiveData(ViewState<ImageDto>())
     val status = _status.asLiveData()
 
     private val _url: MutableLiveData<String?> = MutableLiveData(null)
@@ -47,25 +47,13 @@ class ImageViewModel @Inject constructor (
     private val _path: MutableLiveData<String?> = MutableLiveData(null)
     val path = _path.asLiveData()
 
+    private var job: Job? = null
+
     init {
         if(sharedPref.getUserProfilePicture() != null) {
             _url.postValue(sharedPref.getUserProfilePicture())
         }
     }
-
-    private var uploadImageUtility: UploadImageUtility = UploadImageUtility(applicationContext, object : UploadImageUtility.ImageUploadProgressListener {
-        override fun onLoadingStarted() {
-            _status.postValue(Resource.Loading())
-        }
-
-        override fun onError(message: String) {
-            _status.postValue(Resource.Error(message = message))
-        }
-
-        override fun onSuccess(imageServerPath: String) {
-            _status.postValue(Resource.Success("${BASE_URL}getImage?filename=$imageServerPath"))
-        }
-    })
 
     fun saveImage(url: String){
         sharedPref.setUserProfilePicture(url)
@@ -77,10 +65,33 @@ class ImageViewModel @Inject constructor (
 
     fun uploadImage() {
         if(_uri.value != null){
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    uploadImageUtility.uploadFile(_uri.value!!)
-                }
+            job?.cancel()
+            job = viewModelScope.launch {
+                val sourceFile = fileFromContentUri(applicationContext, _uri.value!!)
+                val fileName: String = sourceFile.name
+                val part = MultipartBody.Part.createFormData("file", fileName, sourceFile.asRequestBody())
+                repository.uploadAvatar(part)
+                    .onEach { result ->
+                        when(result) {
+                            is Resource.Success -> {
+                                _status.postValue(status.value?.copy(
+                                    response = result.data,
+                                    isLoading = false
+                                ))
+                            }
+                            is Resource.Loading -> {
+                                _status.postValue(status.value?.copy(
+                                    isLoading = true
+                                ))
+                            }
+                            is Resource.Error -> {
+                                _status.postValue(status.value?.copy(
+                                    isLoading = false,
+                                    errorMessage = result.message
+                                ))
+                            }
+                        }
+                    }.launchIn(this)
             }
         } else {
             Timber.d("Выберите фото!")

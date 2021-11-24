@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import dagger.hilt.android.AndroidEntryPoint
 import ru.topchu.winfoxtestapp.BuildConfig
+import ru.topchu.winfoxtestapp.data.remote.WinfoxApi.Companion.BASE_URL
 import ru.topchu.winfoxtestapp.databinding.ActivityImageBinding
 import ru.topchu.winfoxtestapp.utils.Resource
 import timber.log.Timber
@@ -38,7 +40,6 @@ class ImageActivity : AppCompatActivity() {
     private var cameraImageLauncher: ActivityResultLauncher<Uri>? = null
 
     private var tempImageUri: Uri? = null
-    private var tempImagePath: String? = null
 
     @Inject
     lateinit var glide: RequestManager
@@ -105,25 +106,17 @@ class ImageActivity : AppCompatActivity() {
         }
 
         viewModel.status.observe(this) {
-            when(it) {
-                is Resource.Idle -> {
-                    if(binding.progressCircular.visibility == View.VISIBLE)
-                        binding.progressCircular.visibility = View.GONE
-                }
-                is Resource.Loading -> {
-                    if(binding.progressCircular.visibility == View.GONE)
-                        binding.progressCircular.visibility = View.VISIBLE
-                }
-                is Resource.Success -> {
-                    if(binding.progressCircular.visibility == View.VISIBLE)
-                        binding.progressCircular.visibility = View.GONE
-                    Toast.makeText(this, "Фотография успешно обновлена! ${it.data}", Toast.LENGTH_SHORT).show()
-                    it.data?.let { it1 -> viewModel.saveImage(it1) }
-                }
-                is Resource.Error -> {
-                    if(binding.progressCircular.visibility == View.VISIBLE)
-                        binding.progressCircular.visibility = View.GONE
-                    Toast.makeText(this, "Произошла ошибка: ${it.message}", Toast.LENGTH_LONG).show()
+            if(it.isLoading) {
+                binding.progressCircular.visibility = View.VISIBLE
+                binding.uploadImage.isEnabled = false
+            } else {
+                binding.progressCircular.visibility = View.GONE
+                binding.uploadImage.isEnabled = true
+                if(it.errorMessage != null) {
+                    Toast.makeText(this, "Произошла ошибка: ${it.errorMessage}", Toast.LENGTH_LONG).show()
+                } else if(it.response != null) {
+                    Toast.makeText(this, "Фотография успешно обновлена! ${it.response.filename}", Toast.LENGTH_SHORT).show()
+                    viewModel.saveImage("${BASE_URL}getImage?filename=${it.response.filename}")
                 }
             }
         }

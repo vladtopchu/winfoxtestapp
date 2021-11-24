@@ -18,6 +18,10 @@ interface WinfoxApi {
     @POST("/updateProfile")
     suspend fun updateProfile(@Body updateProfile: UpdateProfileDto): UpdateProfileDto
 
+    @Multipart
+    @POST("/uploadAvatar")
+    suspend fun uploadAvatar(@Part file: MultipartBody.Part): ImageDto
+
     companion object {
         const val BASE_URL = "http://94.127.67.113:8099/"
     }

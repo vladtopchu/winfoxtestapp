@@ -2,9 +2,11 @@ package ru.topchu.winfoxtestapp.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.MultipartBody
 import retrofit2.HttpException
 import retrofit2.Response
 import ru.topchu.winfoxtestapp.data.remote.WinfoxApi
+import ru.topchu.winfoxtestapp.data.remote.dto.ImageDto
 import ru.topchu.winfoxtestapp.data.remote.dto.LoginDto
 import ru.topchu.winfoxtestapp.data.remote.dto.RegistrationDto
 import ru.topchu.winfoxtestapp.data.remote.dto.UpdateProfileDto
@@ -58,6 +60,24 @@ class WinfoxRepoImpl(
         emit(Resource.Loading())
         try {
             val updateResponse = api.updateProfile(updateProfileForm)
+            emit(Resource.Success(updateResponse))
+        } catch (e: HttpException) {
+            Timber.d(e.toString())
+            emit(Resource.Error(
+                message = "Сервер ответил ошибкой"
+            ))
+        } catch (e: IOException) {
+            Timber.d(e.toString())
+            emit(Resource.Error(
+                message = "Проверьте интернет-соединение"
+            ))
+        }
+    }
+
+    override fun uploadAvatar(file: MultipartBody.Part): Flow<Resource<ImageDto>>  = flow {
+        emit(Resource.Loading())
+        try {
+            val updateResponse = api.uploadAvatar(file)
             emit(Resource.Success(updateResponse))
         } catch (e: HttpException) {
             Timber.d(e.toString())

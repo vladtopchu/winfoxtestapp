@@ -24,7 +24,7 @@ class UploadImageUtility(var context: Context, var listener: ImageUploadProgress
     suspend fun uploadFile(sourceUri: Uri) {
         val sourceFile = fileFromContentUri(context, sourceUri)
         Timber.d(sourceFile.toString())
-        val fileName: String = sourceFile!!.name
+        val fileName: String = sourceFile.name
         listener.onLoadingStarted()
         try {
             val requestBody: RequestBody =
@@ -54,44 +54,4 @@ class UploadImageUtility(var context: Context, var listener: ImageUploadProgress
         fun onError(message: String)
         fun onSuccess(imagePath: String)
     }
-
-    fun fileFromContentUri(context: Context, contentUri: Uri): File {
-        val fileExtension = getFileExtension(context, contentUri)
-        val fileName = "temp_file" + if (fileExtension != null) ".$fileExtension" else ""
-
-        val tempFile = File(context.cacheDir, fileName).apply {
-            createNewFile()
-            deleteOnExit()
-        }
-
-        try {
-            val oStream = FileOutputStream(tempFile)
-            val inputStream = context.contentResolver.openInputStream(contentUri)
-
-            inputStream?.let {
-                copy(inputStream, oStream)
-            }
-
-            oStream.flush()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return tempFile
-    }
-
-    private fun getFileExtension(context: Context, uri: Uri): String? {
-        val fileType: String? = context.contentResolver.getType(uri)
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(fileType)
-    }
-
-    @Throws(IOException::class)
-    private fun copy(source: InputStream, target: OutputStream) {
-        val buf = ByteArray(8192)
-        var length: Int
-        while (source.read(buf).also { length = it } > 0) {
-            target.write(buf, 0, length)
-        }
-    }
-
 }
