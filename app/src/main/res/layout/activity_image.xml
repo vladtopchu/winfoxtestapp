@@ -5,30 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.profile.ProfileFragment">
+    android:gravity="center"
+    tools:context=".presentation.ImageActivity">
 
-    <TextView
-        android:id="@+id/test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="PROFILE" />
-
-    <Button
-        android:id="@+id/to_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Изменить данные профиля"/>
+    <ImageView
+        android:id="@+id/selected_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
 
     <Button
-        android:id="@+id/to_image"
+        android:id="@+id/select_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Загрузить фото"/>
+        android:text="Выбрать изображение"/>
 
     <Button
-        android:id="@+id/logout"
+        android:id="@+id/make_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Выйти"/>
+        android:text="Сделать фото"/>
 
+    <Button
+        android:id="@+id/upload_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Обновить"/>
 </LinearLayout>

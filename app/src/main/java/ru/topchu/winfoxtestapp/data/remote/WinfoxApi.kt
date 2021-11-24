@@ -1,9 +1,7 @@
 package ru.topchu.winfoxtestapp.data.remote
 
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import okhttp3.MultipartBody
+import retrofit2.http.*
 import ru.topchu.winfoxtestapp.data.remote.dto.ImageDto
 import ru.topchu.winfoxtestapp.data.remote.dto.LoginDto
 import ru.topchu.winfoxtestapp.data.remote.dto.RegistrationDto
@@ -19,9 +17,6 @@ interface WinfoxApi {
 
     @POST("/updateProfile")
     suspend fun updateProfile(@Body updateProfile: UpdateProfileDto): UpdateProfileDto
-
-    @GET("/getImage")
-    suspend fun getImage(@Query("filename") filename: String): ImageDto
 
     companion object {
         const val BASE_URL = "http://94.127.67.113:8099/"

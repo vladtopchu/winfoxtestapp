@@ -149,27 +149,13 @@ class InfoFragment : Fragment() {
             } else {
                 val userUpdate = UpdateProfileDto()
                 userUpdate.email = binding.emailInput.text.toString()
-                if(binding.firstnameInput != null) {
-                    userUpdate.firstname = binding.firstnameInput.text.toString()
-                }
-                if(binding.lastnameInput != null) {
-                    userUpdate.lastname = binding.lastnameInput.text.toString()
-                }
-                if(binding.middlenameInput != null) {
-                    userUpdate.middlename = binding.middlenameInput.text.toString()
-                }
-                if(binding.organizationInput != null) {
-                    userUpdate.organization = binding.organizationInput.text.toString()
-                }
-                if(binding.positionInput != null) {
-                    userUpdate.position = binding.positionInput.text.toString()
-                }
-                if(binding.birthdateInput != null) {
-                    userUpdate.birthdate = binding.birthdateInput.text.toString()
-                }
-                if(binding.birthplaceInput != null) {
-                    userUpdate.birth_place = binding.birthplaceInput.text.toString()
-                }
+                userUpdate.firstname = binding.firstnameInput.text.toString()
+                userUpdate.lastname = binding.lastnameInput.text.toString()
+                userUpdate.middlename = binding.middlenameInput.text.toString()
+                userUpdate.organization = binding.organizationInput.text.toString()
+                userUpdate.position = binding.positionInput.text.toString()
+                userUpdate.birthdate = binding.birthdateInput.text.toString()
+                userUpdate.birth_place = binding.birthplaceInput.text.toString()
                 userUpdate.preferences = viewModel.prefs.value!!
                 viewModel.proceedUpdate(userUpdate)
             }

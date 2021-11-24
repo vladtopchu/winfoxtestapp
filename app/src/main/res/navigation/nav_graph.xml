@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/profileFragment">
-
     <fragment
         android:id="@+id/profileFragment"
         android:name="ru.topchu.winfoxtestapp.presentation.profile.ProfileFragment"

@@ -1,5 +1,6 @@
 package ru.topchu.winfoxtestapp.presentation.profile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import ru.topchu.winfoxtestapp.R
 import ru.topchu.winfoxtestapp.data.local.AppDatabase
 import ru.topchu.winfoxtestapp.databinding.FragmentProfileBinding
 import ru.topchu.winfoxtestapp.di.ApplicationScope
+import ru.topchu.winfoxtestapp.presentation.ImageActivity
 import ru.topchu.winfoxtestapp.utils.SharedPref
 import javax.inject.Inject
 
@@ -61,6 +63,10 @@ class ProfileFragment : Fragment() {
             if(it != null) {
                 binding.test.text = it.toString()
             }
+        }
+
+        binding.toImage.setOnClickListener {
+            startActivity(Intent(requireActivity(), ImageActivity::class.java))
         }
 
         binding.toInfo.setOnClickListener {
