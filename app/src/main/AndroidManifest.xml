@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ImageActivity"
+            android:name=".presentation.profile.image.ImageActivity"
             android:exported="true"/>
 
         <provider

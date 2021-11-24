@@ -5,30 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".presentation.profile.ProfileFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:text="@string/current_user" />
 
     <TextView
         android:id="@+id/test"
         android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="wrap_content"
-        android:text="PROFILE" />
+        android:layout_marginVertical="10dp"
+        android:text="" />
 
     <Button
         android:id="@+id/to_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Изменить данные профиля"/>
+        android:text="@string/change_profile_info"/>
 
     <Button
         android:id="@+id/to_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Загрузить фото"/>
+        android:text="@string/change_progile_picture"/>
 
     <Button
         android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Выйти"/>
+        android:layout_marginTop="10dp"
+        android:text="@string/logout"/>
 
 </LinearLayout>

@@ -42,13 +42,11 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.hintText.translationX = -(binding.hintText.measuredWidth).toFloat()
-
         binding.hint.setOnClickListener {
             if(binding.hintText.alpha == 0f) {
-                binding.hintText.animate().alpha(1f).translationX(0f).setDuration(1000).start()
+                binding.hintText.animate().alpha(1f).translationX(0f).setDuration(500).start()
             } else {
-                binding.hintText.animate().alpha(0f).translationX(-binding.hintText.width.toFloat()).setDuration(1000).start()
+                binding.hintText.animate().alpha(0f).translationX(-binding.hintText.width.toFloat()).setDuration(500).start()
             }
         }
 
@@ -69,8 +67,6 @@ class LoginFragment : Fragment() {
         binding.showPassword.setOnClickListener(clickListener(binding.passwordInput))
 
         binding.proceedLogin.setOnClickListener {
-            Timber.d(binding.emailInput.text.toString())
-            Timber.d(binding.passwordInput.text.toString())
             if(binding.emailInput.text.toString().isEmpty() || binding.passwordInput.text.toString().isEmpty()){
                 Toast.makeText(requireContext(), "Заполните все поля!", Toast.LENGTH_LONG).show()
             } else if(!isValidEmail(binding.emailInput.text.toString())) {

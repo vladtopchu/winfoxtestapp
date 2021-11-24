@@ -1,4 +1,4 @@
-package ru.topchu.winfoxtestapp.presentation
+package ru.topchu.winfoxtestapp.presentation.profile.image
 
 import android.content.Context
 import android.net.Uri
@@ -14,7 +14,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.topchu.winfoxtestapp.data.local.AppDatabase
+import ru.topchu.winfoxtestapp.data.local.daos.UserDao
 import ru.topchu.winfoxtestapp.data.local.entities.UserEntity
+import ru.topchu.winfoxtestapp.data.remote.WinfoxApi.Companion.BASE_URL
 import ru.topchu.winfoxtestapp.data.remote.dto.LoginDto
 import ru.topchu.winfoxtestapp.data.remote.dto.RegistrationDto
 import ru.topchu.winfoxtestapp.domain.repository.WinfoxRepository
@@ -30,8 +32,14 @@ import kotlin.math.log
 class ImageViewModel @Inject constructor (
     @ApplicationContext applicationContext: Context,
     private val sharedPref: SharedPref,
-    private val database: AppDatabase
+    private val userDao: UserDao
 ): ViewModel() {
+
+    private val _status: MutableLiveData<Resource<String>> = MutableLiveData(Resource.Idle())
+    val status = _status.asLiveData()
+
+    private val _url: MutableLiveData<String?> = MutableLiveData(null)
+    val url = _url.asLiveData()
 
     private val _uri: MutableLiveData<Uri?> = MutableLiveData(null)
     val uri = _uri.asLiveData()
@@ -39,19 +47,29 @@ class ImageViewModel @Inject constructor (
     private val _path: MutableLiveData<String?> = MutableLiveData(null)
     val path = _path.asLiveData()
 
-    var uploadImageUtility: UploadImageUtility = UploadImageUtility(applicationContext, object : UploadImageUtility.ImageUploadProgressListener {
+    init {
+        if(sharedPref.getUserProfilePicture() != null) {
+            _url.postValue(sharedPref.getUserProfilePicture())
+        }
+    }
+
+    private var uploadImageUtility: UploadImageUtility = UploadImageUtility(applicationContext, object : UploadImageUtility.ImageUploadProgressListener {
         override fun onLoadingStarted() {
-            Timber.d("Loading started")
+            _status.postValue(Resource.Loading())
         }
 
         override fun onError(message: String) {
-            Timber.d(message)
+            _status.postValue(Resource.Error(message = message))
         }
 
-        override fun onSuccess(imagePath: String) {
-            Timber.d(imagePath)
+        override fun onSuccess(imageServerPath: String) {
+            _status.postValue(Resource.Success("${BASE_URL}getImage?filename=$imageServerPath"))
         }
     })
+
+    fun saveImage(url: String){
+        sharedPref.setUserProfilePicture(url)
+    }
 
     fun setUri(string: Uri) {
        _uri.postValue(string)

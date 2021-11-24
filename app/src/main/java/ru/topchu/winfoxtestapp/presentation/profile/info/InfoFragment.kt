@@ -2,29 +2,17 @@ package ru.topchu.winfoxtestapp.presentation.profile.info
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import ru.topchu.winfoxtestapp.data.local.AppDatabase
 import ru.topchu.winfoxtestapp.data.remote.dto.UpdateProfileDto
 import ru.topchu.winfoxtestapp.databinding.FragmentInfoBinding
-import ru.topchu.winfoxtestapp.databinding.FragmentProfileBinding
-import ru.topchu.winfoxtestapp.di.ApplicationScope
 import ru.topchu.winfoxtestapp.utils.*
 import ru.topchu.winfoxtestapp.utils.Constants.INTERESTS
 import timber.log.Timber
@@ -47,13 +35,6 @@ class InfoFragment : Fragment() {
     @Inject
     lateinit var sharedPref: SharedPref
 
-    @Inject
-    lateinit var database: AppDatabase
-
-    @Inject
-    @ApplicationScope
-    lateinit var applicationScope: CoroutineScope
-
     override fun onResume() {
         super.onResume()
         firstLaunch = true
@@ -72,61 +53,51 @@ class InfoFragment : Fragment() {
         initDatePicker()
         initInterestsPicker(null)
 
-        viewModel.prefs.observe(viewLifecycleOwner) {
-            Timber.d(it.toString())
-        }
-
         viewModel.state.observe(viewLifecycleOwner) {
             if(it.isLoading) {
                 binding.progressCircular.visibility = View.VISIBLE
             } else {
                 binding.progressCircular.visibility = View.GONE
-                binding.proceedUpdate.isEnabled = true
                 if(it.errorMessage != null) {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
                 } else if(it.response != null) {
-                    Toast.makeText(requireContext(), "SUCCESS", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity().applicationContext, "Информация успешно обновлена!", Toast.LENGTH_LONG).show()
+                    findNavController().navigate(InfoFragmentDirections.actionInfoFragmentToProfileFragment())
                 }
             }
         }
 
+        viewModel.prefs.observe(viewLifecycleOwner) {
+            binding.interests.text = it.toString()
+        }
+
         viewModel.userData.observe(viewLifecycleOwner) {
             if(it != null) {
-                Timber.d("USERDATA")
-                Timber.d(it.toString())
                 binding.progressCircular.visibility = View.GONE
                 binding.form.visibility = View.VISIBLE
                 if(firstLaunch) {
                     if(it.email != null){
-                        Timber.d("email is not null", it.email)
                         binding.emailInput.text = it.email.toEditable()
                     }
                     if(it.firstname != null){
-                        Timber.d("firstname is not null", it.firstname)
                         binding.firstnameInput.text = it.firstname.toEditable()
                     }
                     if(it.lastname != null){
-                        Timber.d("lastname is not null", it.lastname)
                         binding.lastnameInput.text = it.lastname.toEditable()
                     }
                     if(it.middlename != null){
-                        Timber.d("midllename is not null", it.middlename)
                         binding.middlenameInput.text = it.middlename.toEditable()
                     }
                     if(it.birth_place != null){
-                        Timber.d("birthplace is not null", it.middlename)
                         binding.birthplaceInput.text = it.birth_place.toEditable()
                     }
                     if(it.organization != null){
-                        Timber.d("organization is not null", it.middlename)
                         binding.organizationInput.text = it.organization.toEditable()
                     }
                     if(it.position != null){
-                        Timber.d("position is not null", it.middlename)
                         binding.positionInput.text = it.position.toEditable()
                     }
                     if(it.birthdate != null){
-                        Timber.d("birthdate is not null", it.birthdate)
                         val arr = fromDateString(it.birthdate)
                         Timber.d(arr.toString())
                         datePickerDialog.datePicker.updateDate(arr[2], arr[1], arr[0])
@@ -142,20 +113,20 @@ class InfoFragment : Fragment() {
                 binding.progressCircular.visibility = View.VISIBLE
             }
         }
+
         binding.proceedUpdate.setOnClickListener {
-            Timber.d("ProceedUpdate")
             if(!isValidEmail(binding.emailInput.text.toString())){
                 Toast.makeText(requireContext(), "Введите корректный эл. адрес", Toast.LENGTH_LONG).show()
             } else {
                 val userUpdate = UpdateProfileDto()
-                userUpdate.email = binding.emailInput.text.toString()
-                userUpdate.firstname = binding.firstnameInput.text.toString()
-                userUpdate.lastname = binding.lastnameInput.text.toString()
-                userUpdate.middlename = binding.middlenameInput.text.toString()
-                userUpdate.organization = binding.organizationInput.text.toString()
-                userUpdate.position = binding.positionInput.text.toString()
-                userUpdate.birthdate = binding.birthdateInput.text.toString()
-                userUpdate.birth_place = binding.birthplaceInput.text.toString()
+                userUpdate.email = if(binding.emailInput.text.toString().isEmpty()) null else binding.emailInput.text.toString()
+                userUpdate.firstname = if(binding.firstnameInput.text.toString().isEmpty()) null else binding.firstnameInput.text.toString()
+                userUpdate.lastname = if(binding.lastnameInput.text.toString().isEmpty()) null else binding.lastnameInput.text.toString()
+                userUpdate.middlename = if(binding.middlenameInput.text.toString().isEmpty()) null else binding.middlenameInput.text.toString()
+                userUpdate.organization = if(binding.organizationInput.text.toString().isEmpty()) null else binding.organizationInput.text.toString()
+                userUpdate.position = if(binding.positionInput.text.toString().isEmpty()) null else binding.positionInput.text.toString()
+                userUpdate.birthdate = if(binding.birthdateInput.text.toString().isEmpty()) null else binding.birthdateInput.text.toString()
+                userUpdate.birth_place = if(binding.birthplaceInput.text.toString().isEmpty()) null else binding.birthplaceInput.text.toString()
                 userUpdate.preferences = viewModel.prefs.value!!
                 viewModel.proceedUpdate(userUpdate)
             }

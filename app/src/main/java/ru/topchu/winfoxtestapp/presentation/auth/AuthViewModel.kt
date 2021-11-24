@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.topchu.winfoxtestapp.data.local.AppDatabase
+import ru.topchu.winfoxtestapp.data.local.daos.UserDao
 import ru.topchu.winfoxtestapp.data.local.entities.UserEntity
 import ru.topchu.winfoxtestapp.data.remote.dto.LoginDto
 import ru.topchu.winfoxtestapp.data.remote.dto.RegistrationDto
@@ -22,7 +23,7 @@ import kotlin.math.log
 @HiltViewModel
 class AuthViewModel @Inject constructor (
     private val sharedPref: SharedPref,
-    private val database: AppDatabase
+    private val userDao: UserDao
 ): ViewModel() {
 
     private val _status = MutableLiveData(false)
@@ -35,7 +36,7 @@ class AuthViewModel @Inject constructor (
     fun proceedAuth(loginData: LoginDto) {
         viewModelScope.launch {
             sharedPref.setUserId(loginData.id!!)
-            database.userDao().createUser(loginData.toUserEntity())
+            userDao.createUser(loginData.toUserEntity())
             _status.postValue(true)
         }
     }
@@ -43,7 +44,7 @@ class AuthViewModel @Inject constructor (
     fun proceedAuth(registrationData: RegistrationDto) {
         viewModelScope.launch {
             sharedPref.setUserId(registrationData.id!!)
-            database.userDao().createUser(registrationData.toUserEntity())
+            userDao.createUser(registrationData.toUserEntity())
             _status.postValue(true)
         }
     }

@@ -9,17 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import ru.topchu.winfoxtestapp.R
-import ru.topchu.winfoxtestapp.data.local.AppDatabase
 import ru.topchu.winfoxtestapp.databinding.FragmentProfileBinding
-import ru.topchu.winfoxtestapp.di.ApplicationScope
-import ru.topchu.winfoxtestapp.presentation.ImageActivity
-import ru.topchu.winfoxtestapp.utils.SharedPref
-import javax.inject.Inject
+import ru.topchu.winfoxtestapp.presentation.profile.image.ImageActivity
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -28,16 +20,6 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ProfileViewModel by viewModels()
-
-    @Inject
-    lateinit var sharedPref: SharedPref
-
-    @Inject
-    lateinit var database: AppDatabase
-
-    @Inject
-    @ApplicationScope
-    lateinit var applicationScope: CoroutineScope
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,8 +37,11 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(sharedPref.getUserId() == null) {
-            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToAuthFragment())
+        viewModel.isLoggedIn.observe(viewLifecycleOwner) {
+            if(!it){
+                Timber.d("SP userid == null")
+                findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToAuthFragment())
+            }
         }
 
         viewModel.userData.observe(viewLifecycleOwner) {
@@ -74,13 +59,7 @@ class ProfileFragment : Fragment() {
         }
 
         binding.logout.setOnClickListener {
-            applicationScope.launch {
-                database.userDao().deleteUser(sharedPref.getUserId()!!)
-                sharedPref.wipeUserId()
-                withContext(Dispatchers.Main){
-                    findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToAuthFragment())
-                }
-            }
+            viewModel.logout()
         }
     }
 

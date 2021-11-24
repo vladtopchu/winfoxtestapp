@@ -2,4 +2,40 @@
     <string name="app_name">WinfoxTestApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="login_hint">Свайпните влево, чтобы\nперейти на страницу Регистрации</string>
+    <string name="login_title">Войти</string>
+    <string name="email_title">Электронная почта</string>
+    <string name="email_hint">Введите адрес эл. почты</string>
+    <string name="password_title">Пароль</string>
+    <string name="password_hint">Введите пароль</string>
+    <string name="password_repeat_title">Повтор пароля</string>
+    <string name="password_repeat_hint">Повторите пароль</string>
+    <string name="registration_title">Регистрация</string>
+    <string name="firstname_title">Имя</string>
+    <string name="firstname_hint">Введите имя</string>
+    <string name="lastname_title">Фамилия</string>
+    <string name="lastname_hint">Введите фамилию</string>
+    <string name="middlename_title">Отчество</string>
+    <string name="middlename_hint">Введите отчество</string>
+    <string name="birthday_title">Дата рождения</string>
+    <string name="birth_place_title">Место рождения</string>
+    <string name="birth_place_hint">Введите место рождения</string>
+    <string name="organization_title">Место работы</string>
+    <string name="organizaton_hint">Введите место работы</string>
+    <string name="position_title">Должность</string>
+    <string name="position_hint">Введите название должности</string>
+    <string name="preferences_title">Ваши увлечения</string>
+    <string name="preferences_input">Выбрать интересы</string>
+    <string name="proceed_update">Обновить информацию</string>
+    <string name="registration_action">Зарегистрироваться</string>
+    <string name="current_user">Текущий пользователь:</string>
+    <string name="change_profile_info">Изменить данные профиля</string>
+    <string name="change_progile_picture">Изменить фото профиля</string>
+    <string name="logout">Выйти</string>
+    <string name="change_profile_title">Изменение данных профиля</string>
+    <string name="choose_image">Выбрать изображение</string>
+    <string name="current_photo">Текущее фото:</string>
+    <string name="take_image">Сделать изображение</string>
+    <string name="update_image">Обновить фото профиля</string>
 </resources>

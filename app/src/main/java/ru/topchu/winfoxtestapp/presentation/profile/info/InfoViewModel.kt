@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.topchu.winfoxtestapp.data.local.AppDatabase
+import ru.topchu.winfoxtestapp.data.local.daos.UserDao
 import ru.topchu.winfoxtestapp.data.local.entities.UserEntity
 import ru.topchu.winfoxtestapp.data.remote.dto.LoginDto
 import ru.topchu.winfoxtestapp.data.remote.dto.RegistrationDto
@@ -27,7 +28,7 @@ import kotlin.math.log
 @HiltViewModel
 class InfoViewModel @Inject constructor (
     private val sharedPref: SharedPref,
-    private val database: AppDatabase,
+    private val userDao: UserDao,
     private val repository: WinfoxRepository
 ): ViewModel() {
 
@@ -44,7 +45,7 @@ class InfoViewModel @Inject constructor (
 
     init {
         viewModelScope.launch {
-            val user = database.userDao().getUserById(sharedPref.getUserId()!!)
+            val user = userDao.getUserById(sharedPref.getUserId()!!)
             _userData.postValue(user)
             if(user.preferences.isNotEmpty()) {
                 _prefs.postValue(user.preferences.toMutableList())
@@ -53,7 +54,6 @@ class InfoViewModel @Inject constructor (
     }
 
     fun addToPrefs(string: String){
-        Timber.d("addtoprefs")
         if(!_prefs.value!!.contains(string)){
             _prefs.value!!.add(string)
             _prefs.postValue(_prefs.value)
@@ -61,7 +61,6 @@ class InfoViewModel @Inject constructor (
     }
 
     fun removeFromPrefs(string: String) {
-        Timber.d("removefromprefs")
         if(_prefs.value!!.contains(string)){
             _prefs.value!!.remove(string)
             _prefs.postValue(_prefs.value)
@@ -82,7 +81,7 @@ class InfoViewModel @Inject constructor (
                             ))
                             val entity = result.data!!.toEntity()
                             entity.id = userData.value!!.id
-                            val test = database.userDao().updateUser(entity)
+                            val test = userDao.updateUser(entity)
                             Timber.d("Db updated?")
                             Timber.d(test.toString())
                             if(test == 1) {

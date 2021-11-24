@@ -20,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.topchu.winfoxtestapp.R
 import ru.topchu.winfoxtestapp.data.local.AppDatabase
 import ru.topchu.winfoxtestapp.data.local.Converters
+import ru.topchu.winfoxtestapp.data.local.daos.UserDao
 import ru.topchu.winfoxtestapp.data.remote.WinfoxApi
 import ru.topchu.winfoxtestapp.data.repository.WinfoxRepoImpl
 import ru.topchu.winfoxtestapp.domain.repository.WinfoxRepository
@@ -57,6 +58,10 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
+
+    @Provides
+    @Singleton
     fun provideWinfoxRepository(
         api: WinfoxApi
     ): WinfoxRepository {
@@ -74,8 +79,8 @@ object AppModule {
         @ApplicationContext context: Context
     ) = Glide.with(context).setDefaultRequestOptions(
         RequestOptions()
-            .placeholder(R.drawable.ic_launcher_background)
-            .error(R.drawable.ic_launcher_background)
+            .placeholder(R.drawable.ic_camera)
+            .error(R.drawable.ic_camera)
             .diskCacheStrategy(DiskCacheStrategy.DATA)
     )
 

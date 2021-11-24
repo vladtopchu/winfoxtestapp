@@ -22,7 +22,6 @@ class UploadImageUtility(var context: Context, var listener: ImageUploadProgress
     private val client = OkHttpClient()
 
     suspend fun uploadFile(sourceUri: Uri) {
-//        val sourceFile = File(UriPathHelper().getPath(context, sourceUri))
         val sourceFile = fileFromContentUri(context, sourceUri)
         Timber.d(sourceFile.toString())
         val fileName: String = sourceFile!!.name
@@ -57,13 +56,13 @@ class UploadImageUtility(var context: Context, var listener: ImageUploadProgress
     }
 
     fun fileFromContentUri(context: Context, contentUri: Uri): File {
-        // Preparing Temp file name
         val fileExtension = getFileExtension(context, contentUri)
         val fileName = "temp_file" + if (fileExtension != null) ".$fileExtension" else ""
 
-        // Creating Temp file
-        val tempFile = File(context.cacheDir, fileName)
-        tempFile.createNewFile()
+        val tempFile = File(context.cacheDir, fileName).apply {
+            createNewFile()
+            deleteOnExit()
+        }
 
         try {
             val oStream = FileOutputStream(tempFile)

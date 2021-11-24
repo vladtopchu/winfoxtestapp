@@ -22,13 +22,11 @@
 
         <TextView
             android:id="@+id/hint_text"
-            android:layout_toEndOf="@id/hint"
             android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0"
             android:layout_marginStart="10dp"
-            android:text="Свайпните влево, чтобы\nперейти на страницу Регистрации"/>
+            android:text="@string/login_hint"/>
     </LinearLayout>
 
     <ProgressBar
@@ -57,27 +55,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Войти" />
+                android:text="@string/login_title" />
 
             <TextView
                 android:id="@+id/email_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/email_input"
-                android:text="Электронная почта" />
+                android:text="@string/email_title" />
 
             <EditText
                 android:id="@+id/email_input"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Введите адрес эл. почты"
+                android:hint="@string/email_hint"
                 android:inputType="textEmailAddress" />
 
             <TextView
                 android:id="@+id/pwd_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Пароль" />
+                android:text="@string/password_title" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -87,7 +85,7 @@
                     android:id="@+id/password_input"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:hint="Введите пароль"
+                    android:hint="@string/password_hint"
                     android:inputType="textPassword" />
 
                 <ImageView
@@ -102,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Войти" />
+                android:text="@string/login_title" />
 
         </LinearLayout>
     </LinearLayout>

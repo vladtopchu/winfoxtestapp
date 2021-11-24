@@ -35,5 +35,12 @@
         android:id="@+id/infoFragment"
         android:name="ru.topchu.winfoxtestapp.presentation.profile.info.InfoFragment"
         android:label="fragment_info"
-        tools:layout="@layout/fragment_info" />
+        tools:layout="@layout/fragment_info" >
+        <action
+            android:id="@+id/action_infoFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>
